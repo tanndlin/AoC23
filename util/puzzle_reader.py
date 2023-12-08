@@ -7,12 +7,18 @@ def readPuzzle(fileName):
 def readSample(fileName):
     data = readPuzzle(fileName)
 
-    # Very last line is expected value
-    expected = data[-1]
+    # Second to last is expected for part 1
+    expected1 = data[-2]
 
-    # Make sure last line is just a number
-    assert expected.isnumeric(), f"Expected value must be a number, got {expected}"
+    # Very last line is expected for part 2
+    expected2 = data[-1]
 
-    data = data[:-1]
+    # Make sure last two lines are just numbers
+    assert expected1.isnumeric(), f"Expected value must be a number, got {expected1}"
 
-    return data, int(expected)
+    # May have not unlocked the second part yet
+    # assert expected2.isnumeric(), f"Expected value must be a number, got {expected2}"
+
+    data = data[:-2]
+
+    return data, int(expected1), int(expected2)
