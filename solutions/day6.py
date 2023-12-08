@@ -4,10 +4,9 @@ from util.solution_base import SolutionBase
 
 
 class Solution(SolutionBase):
-    def __init__(self, data, expectedValue1=-1, expectedValue2=-1):
-        super().__init__(data, expectedValue1, expectedValue2)
-        self.data[0] = " ".join(data[0].split())
-        self.data[1] = " ".join(data[1].split())
+    def preprocess(self):
+        self.data[0] = " ".join(self.data[0].split())
+        self.data[1] = " ".join(self.data[1].split())
 
         self.lengths = list(map(int, self.data[0].split(" ")[1:]))
         self.distances = list(map(int, self.data[1].split(" ")[1:]))

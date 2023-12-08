@@ -8,8 +8,7 @@ from util.solution_base import SolutionBase
 
 
 class Solution(SolutionBase):
-    def __init__(self, _data, expectedValue1=-1, expectedValue2=-1):
-        super().__init__(_data, expectedValue1, expectedValue2)
+    def preprocess(self):
         for i in range(len(self.data)):
             self.data[i] = self.data[i].split(" ")
             self.data[i] = {"cards": self.data[i][0], "bid": int(self.data[i][1])}

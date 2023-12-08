@@ -9,6 +9,12 @@ class SolutionBase:
         self.expectedValue1 = expectedValue1
         self.expectedValue2 = expectedValue2
 
+        self.preprocess()
+
+    @abc.abstractmethod
+    def preprocess(self):
+        pass
+
     @abc.abstractmethod
     def part1(self) -> int:
         pass
