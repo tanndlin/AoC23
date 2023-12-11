@@ -77,10 +77,7 @@ class Solution(SolutionBase):
                 for p in potential:
                     tryAddNeighbors((x, y), p)
 
-    def part1(self) -> int:
-        self.preprocess()
-        print(self.adj[self.start])
-
+    def getCellsInLoop(self):
         queue = [self.start]
         visited = set()
 
@@ -93,4 +90,73 @@ class Solution(SolutionBase):
             visited.add(pos)
             queue.extend(self.adj[pos])
 
-        return len(visited) // 2
+        return visited
+
+    def part1(self) -> int:
+        return len(self.getCellsInLoop()) // 2
+
+    def floodFill(self, pos, visited, inLoop):
+        q = [pos]
+        while len(q) > 0:
+            pos = q.pop()
+
+            if (
+                pos[0] < 0
+                or pos[0] >= len(self.data[0])
+                or pos[1] < 0
+                or pos[1] >= len(self.data)
+            ):
+                continue
+
+            if pos in visited or pos in self.allVisited or pos in inLoop:
+                continue
+
+            if (
+                pos[0] == 0
+                or pos[0] == len(self.data[0]) - 1
+                or pos[1] == 0
+                or pos[1] == len(self.data) - 1
+            ):
+                if visited not in self._outerSets:
+                    self._outerSets.append(visited)
+
+            visited.add(pos)
+            self.allVisited.add(pos)
+            # Check up down left right
+            for d in self._dirs:
+                newPos = (pos[0] + d[0], pos[1] + d[1])
+                q.append(newPos)
+
+    def part2(self) -> int:
+        values = {
+            "|": 1,
+            "-": 0,
+            "L": 0.5,
+            "J": 0.5,
+            "7": 0.5,
+            "F": 0.5,
+        }
+
+        inside = set()
+        for y, row in enumerate(self.data):
+            curRowParity = 0
+            for x, sym in enumerate(row):
+                if sym in values:
+                    curRowParity += values[sym]
+                elif sym == ".":
+                    if curRowParity % 2 == 1:
+                        inside.add((x, y))
+
+        for y, row in enumerate(self.data):
+            for x, sym in enumerate(row):
+                if (x, y) in inside:
+                    print("#", end="")
+                elif (x, y) in self.getCellsInLoop():
+                    print("X", end="")
+                else:
+                    print(".", end="")
+            print()
+
+        return len(inside)
+
+        # Number of enclosed cells are the number of floodfill - number in loop
